@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14284b">
+<title>Roz ka Hisab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Hind:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f4fa;--card:#fff;--ink:#14213d;--mute:#6a7690;--line:#dde3ef;--navy:#14284b;--navy2:#22407a;--soft:#e6ecf8;--gold:#f4b942;--red:#c9444a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;font:400 14px/1.4 'Hind',system-ui,sans-serif;background:var(--bg);color:var(--ink);
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+h1,h2,.num{font-family:'Baloo 2',sans-serif;margin:0}
+.wrap{max-width:480px;margin:0 auto;padding:0 14px}
+header{background:var(--navy);color:#fff;padding:12px 0 52px;border-radius:0 0 20px 20px}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:8px}
+header h1{font-size:17px;font-weight:700}
+.month{display:flex;align-items:center;background:rgba(255,255,255,.12);border-radius:999px}
+.month button{width:32px;height:32px;border:0;background:none;color:#fff;font-size:18px;border-radius:50%;cursor:pointer}
+.month span{min-width:98px;text-align:center;font-weight:600;font-size:13px}
+.total{max-width:452px;margin:-38px auto 0;background:var(--card);border-radius:16px;padding:12px 16px;
+  box-shadow:0 6px 18px rgba(20,40,75,.15);display:flex;justify-content:space-between;align-items:flex-end;position:relative}
+.total small{color:var(--mute);font-size:12px}
+.total .big{font-size:30px;line-height:1.1;font-weight:700;color:var(--navy)}
+.total .meta{text-align:right;color:var(--mute);font-size:12px}
+.total .meta b{display:block;color:var(--ink);font-size:15px;font-family:'Baloo 2'}
+.sec{font-size:14px;font-weight:600;color:var(--mute);margin:14px 2px 8px;font-family:'Hind'}
+.day{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:8px 10px;margin-bottom:6px;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.day:active{background:var(--soft)}
+.day .d{width:38px;height:40px;border-radius:9px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none}
+.day .d b{font:700 16px/1 'Baloo 2'}.day .d i{font-style:normal;font-size:10px;color:var(--mute)}
+.day .mid{flex:1;min-width:0;font-size:12px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day .amt{font:700 16px 'Baloo 2';color:var(--navy)}
+.day .add{width:28px;height:28px;border-radius:50%;background:var(--soft);color:var(--navy2);display:grid;place-items:center;font-size:18px}
+.day.has{border-color:var(--navy2);background:#f5f8ff}
+.day.today{border-color:var(--gold);box-shadow:0 0 0 2px #fdf0cf}
+.day.today .d{background:var(--gold);color:#2b2000}.day.today .d i{color:#2b2000}
+.day.future{opacity:.5}
+.tag{font-size:10px;background:var(--gold);color:#2b2000;border-radius:5px;padding:0 5px;margin-left:5px;font-weight:600}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+nav .wrap{display:flex;gap:6px}
+nav button{flex:1;border:0;border-radius:11px;padding:9px;font:600 13px 'Hind';background:none;color:var(--mute);cursor:pointer}
+nav button.on{background:var(--navy);color:#fff}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{padding:8px 10px;text-align:left;font-size:13px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--soft);color:var(--navy);font-weight:600}
+td.r,th.r{text-align:right;font:700 14px 'Baloo 2'}
+.note{display:block;color:var(--mute);font-size:11px}
+tr.sum td{background:var(--navy);color:#fff;font-size:14px;border:0}
+.acts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.btn{flex:1;min-width:100px;border:0;border-radius:11px;padding:11px;font:600 13px 'Hind';cursor:pointer;background:var(--navy);color:#fff}
+.btn.alt{background:var(--soft);color:var(--navy)}.btn.wa{background:#1f9d55}
+.empty{text-align:center;color:var(--mute);padding:22px 0}
+.back{position:fixed;inset:0;background:rgba(10,18,40,.5);z-index:10;display:none;align-items:flex-end;justify-content:center}
+.back.show{display:flex}
+.sheet{background:var(--card);width:100%;max-width:480px;border-radius:20px 20px 0 0;padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px));max-height:88%;overflow:auto;animation:up .2s ease-out}
+@keyframes up{from{transform:translateY(30px);opacity:.6}to{transform:none;opacity:1}}
+.sheet h2{font-size:17px;font-weight:700}.sheet .sub{color:var(--mute);font-size:12px;margin-bottom:8px}
+.it{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--bg);border-radius:10px;margin-bottom:5px}
+.it span{flex:1;font-size:13px}.it b{font-family:'Baloo 2';color:var(--navy)}
+.it button{border:0;background:none;color:var(--red);font-size:16px;width:28px;height:28px;cursor:pointer}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.chips button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;font:600 13px 'Hind';cursor:pointer}
+.chips button:active{background:var(--soft)}
+input{width:100%;font:16px 'Hind';padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--ink);margin-bottom:8px}
+input.money{font:700 20px 'Baloo 2'}
+input:focus,button:focus-visible{outline:2px solid var(--navy2);outline-offset:1px}
+.err{color:var(--red);font-size:12px;min-height:16px}
+.toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:8px 14px;border-radius:999px;font-size:12px;z-index:20;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.load{opacity:.5;pointer-events:none}
+@media print{header,nav,.acts{display:none}body{padding:0}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>Roz ka Hisab</h1>
+  <div class="month"><button id="prev" aria-label="Pichla mahina">‹</button><span id="mlabel"></span><button id="next" aria-label="Agla mahina">›</button></div>
+</div></header>
+<div class="total" id="total"></div>
+<main class="wrap">
+  <section id="v-entry"><h2 class="sec">Date par tap karke rupee bharo</h2><div id="days"></div></section>
+  <section id="v-hisab" hidden><h2 class="sec">Mahine ka hisab</h2><div id="report"></div></section>
+</main>
+<nav><div class="wrap"><button id="t-entry" class="on">✏️ Entry bharo</button><button id="t-hisab">📊 Hisab dekho</button></div></nav>
+
+<div class="back" id="back"><div class="sheet">
+  <h2 id="sh-title"></h2><div class="sub" id="sh-sub"></div>
+  <div id="sh-items"></div>
+  <div class="chips" id="chips"></div>
+  <input id="amt" class="money" type="number" inputmode="numeric" min="1" placeholder="₹ Rupee">
+  <input id="what" type="text" placeholder="Kya saman? (chai, pen...)">
+  <div class="acts"><button class="btn alt" id="close">Band karo</button><button class="btn" id="save">+ Jodo</button></div>
+</div></div>
+
+<div class="back" id="lock"><div class="sheet">
+  <h2>PIN daalo</h2><div class="sub">Sirf aap dono ko pata hona chahiye</div>
+  <input id="pin" type="password" inputmode="numeric" placeholder="PIN">
+  <div class="err" id="pinerr"></div>
+  <button class="btn" id="pinok" style="width:100%">Khologe</button>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+var DAYS=['Ravi','Som','Mangal','Budh','Guru','Shukra','Shani'];
+var $=function(i){return document.getElementById(i)};
+var now=new Date(), cur=new Date(now.getFullYear(),now.getMonth(),1), data=[], openDay=null, firstScroll=true;
+function pin(){try{return localStorage.getItem('hisab-pin')||''}catch(e){return ''}}
+function mk(){return cur.getFullYear()+'-'+String(cur.getMonth()+1).padStart(2,'0')}
+function dim(){return new Date(cur.getFullYear(),cur.getMonth()+1,0).getDate()}
+function inr(n){return '₹'+n.toLocaleString('en-IN')}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},1800)}
+function items(d){return data.filter(function(x){return x.d===d})}
+function dtot(d){return items(d).reduce(function(s,i){return s+i.a},0)}
+function mtot(){var t=0,c=0;for(var d=1;d<=dim();d++){var x=dtot(d);if(x){t+=x;c++}}return{t:t,c:c}}
+
+function api(method,qs,body){
+  return fetch('/api/entries'+qs,{method:method,headers:{'Content-Type':'application/json','x-pin':pin()},body:body?JSON.stringify(body):undefined})
+  .then(function(r){return r.json().then(function(j){
+    if(r.status===401){askPin(j.error);throw new Error('pin')}
+    if(!r.ok)throw new Error(j.error||'Error');return j})});
+}
+function load(){
+  $('days').classList.add('load');
+  api('GET','?month='+mk()).then(function(j){data=j.items;$('days').classList.remove('load');render()})
+  .catch(function(e){$('days').classList.remove('load');if(e.message!=='pin')toast(e.message)});
+}
+function askPin(msg){$('pinerr').textContent=pin()?(msg||''):'';$('lock').classList.add('show');setTimeout(function(){$('pin').focus()},100)}
+$('pinok').onclick=function(){try{localStorage.setItem('hisab-pin',$('pin').value.trim())}catch(e){}$('pin').value='';$('lock').classList.remove('show');load()};
+
+function render(){
+  $('mlabel').textContent=MONTHS[cur.getMonth()]+' '+cur.getFullYear();
+  var s=mtot();
+  $('total').innerHTML='<div><small>Is mahine ka total</small><div class="num big">'+inr(s.t)+'</div></div><div class="meta"><b>'+s.c+' din</b>saman aaya</div>';
+  var isNow=cur.getFullYear()===now.getFullYear()&&cur.getMonth()===now.getMonth(),h='';
+  for(var d=1;d<=dim();d++){
+    var dt=new Date(cur.getFullYear(),cur.getMonth(),d),it=items(d),t=dtot(d),today=isNow&&d===now.getDate(),fut=dt>now&&!today;
+    var mid=it.length?it.map(function(i){return esc(i.n||'Saman')+' '+i.a}).join(', '):(today?'Aaj ki entry baaki hai':'—');
+    h+='<button class="day'+(t?' has':'')+(today?' today':'')+(fut?' future':'')+'" data-d="'+d+'"><div class="d"><b>'+d+'</b><i>'+DAYS[dt.getDay()]+'</i></div><div class="mid">'+mid+(today?'<span class="tag">Aaj</span>':'')+'</div>'+(t?'<div class="amt">'+inr(t)+'</div>':'<div class="add">+</div>')+'</button>';
+  }
+  $('days').innerHTML=h;
+  if(isNow&&firstScroll){firstScroll=false;var el=document.querySelector('.day.today');if(el)setTimeout(function(){el.scrollIntoView({block:'center'})},60)}
+  report();
+}
+function rtext(){
+  var L=['*Roz ka Hisab – '+MONTHS[cur.getMonth()]+' '+cur.getFullYear()+'*',''];
+  for(var d=1;d<=dim();d++){var it=items(d);if(!it.length)continue;
+    L.push(String(d).padStart(2,'0')+'/'+String(cur.getMonth()+1).padStart(2,'0')+' : '+inr(dtot(d))+' ('+it.map(function(i){return(i.n||'Saman')+' '+i.a}).join(', ')+')')}
+  L.push('','*Total: '+inr(mtot().t)+'*');return L.join('\n');
+}
+function report(){
+  var rows='';
+  for(var d=1;d<=dim();d++){var it=items(d);if(!it.length)continue;
+    rows+='<tr><td>'+d+' '+MONTHS[cur.getMonth()].slice(0,3)+'<span class="note">'+DAYS[new Date(cur.getFullYear(),cur.getMonth(),d).getDay()]+'</span></td><td>'+it.map(function(i){return esc(i.n||'Saman')+' – ₹'+i.a}).join(', ')+'</td><td class="r">'+inr(dtot(d))+'</td></tr>'}
+  if(!rows){$('report').innerHTML='<div class="empty">Is mahine abhi koi entry nahi hai.</div>';return}
+  $('report').innerHTML='<table><tr><th>Date</th><th>Saman</th><th class="r">Rupee</th></tr>'+rows+'<tr class="sum"><td colspan="2">Total dena hai</td><td class="r">'+inr(mtot().t)+'</td></tr></table><div class="acts"><button class="btn wa" id="wa">WhatsApp par bhejo</button><button class="btn alt" id="cp">Copy</button><button class="btn alt" id="pr">Print / PDF</button></div>';
+  $('wa').onclick=function(){window.open('https://wa.me/?text='+encodeURIComponent(rtext()),'_blank')};
+  $('cp').onclick=function(){if(navigator.clipboard)navigator.clipboard.writeText(rtext()).then(function(){toast('Copy ho gaya')})};
+  $('pr').onclick=function(){window.print()};
+}
+function openSheet(d){
+  openDay=d;$('sh-title').textContent=d+' '+MONTHS[cur.getMonth()]+', '+DAYS[new Date(cur.getFullYear(),cur.getMonth(),d).getDay()]+'var';
+  drawItems();$('amt').value='';$('what').value='';$('back').classList.add('show');setTimeout(function(){$('amt').focus()},150);
+}
+function drawItems(){
+  var it=items(openDay);
+  $('sh-items').innerHTML=it.map(function(x){return'<div class="it"><span>'+esc(x.n||'Saman')+'</span><b>₹'+x.a+'</b><button data-id="'+x.id+'" aria-label="Hatao">✕</button></div>'}).join('');
+  $('sh-sub').textContent=it.length?'Is din ka total: '+inr(dtot(openDay)):'Saman ka rupee bharo';
+}
+function closeSheet(){$('back').classList.remove('show');openDay=null;render()}
+
+$('chips').innerHTML=[10,20,30,50,100].map(function(v){return'<button data-v="'+v+'">₹'+v+'</button>'}).join('');
+$('chips').onclick=function(e){var v=e.target.dataset&&e.target.dataset.v;if(v){$('amt').value=v;$('what').focus()}};
+$('days').onclick=function(e){var b=e.target.closest('.day');if(b)openSheet(+b.dataset.d)};
+$('save').onclick=function(){
+  var a=parseInt($('amt').value,10);if(!a||a<1){toast('Rupee likho');$('amt').focus();return}
+  var btn=$('save');btn.disabled=true;
+  api('POST','',{month:mk(),day:openDay,amount:a,note:$('what').value.trim()}).then(function(j){
+    data.push({id:j.id,d:openDay,a:a,n:$('what').value.trim()});$('amt').value='';$('what').value='';drawItems();toast('Save ho gaya ✓');$('amt').focus();
+  }).catch(function(e){if(e.message!=='pin')toast(e.message)}).then(function(){btn.disabled=false});
+};
+$('sh-items').onclick=function(e){var id=e.target.dataset&&e.target.dataset.id;if(!id)return;
+  api('DELETE','?id='+id).then(function(){data=data.filter(function(x){return x.id!==id});drawItems()}).catch(function(e){if(e.message!=='pin')toast(e.message)})};
+$('close').onclick=closeSheet;
+$('back').onclick=function(e){if(e.target===$('back'))closeSheet()};
+$('prev').onclick=function(){cur=new Date(cur.getFullYear(),cur.getMonth()-1,1);firstScroll=false;load()};
+$('next').onclick=function(){cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);firstScroll=false;load()};
+function tab(t){$('v-entry').hidden=t!=='entry';$('v-hisab').hidden=t!=='hisab';$('t-entry').classList.toggle('on',t==='entry');$('t-hisab').classList.toggle('on',t==='hisab');window.scrollTo(0,0)}
+$('t-entry').onclick=function(){tab('entry')};$('t-hisab').onclick=function(){tab('hisab')};
+render();load();
+})();
+</script>
+</body>
+</html>
